@@ -1,40 +1,31 @@
 package scenarios
 
+import geb.Browser
 import geb.spock.GebReportingSpec
 import herokuapp.pages.BrokenImages
-import jodd.log.Logger
-import jodd.log.LoggerFactory
 import org.junit.Rule
 import org.junit.rules.TestName
-import spock.lang.Specification
+import org.openqa.selenium.chrome.ChromeDriver
 
 class HerokuappTest extends GebReportingSpec {
 
-    static Logger logger = LoggerFactory.getLogger(HerokuappTest.class)
+    @Rule
+    TestName name = new TestName()
+//    static Logger logger = LoggerFactory.getLogger(HerokuappTest.class)
 
     def setupSpec() {
-        logger.info('\n**************\n' + TestName + 'is running')
+        //      logger.info('\n**************\n' + TestName + 'is running')
     }
-/*
-    @Override
-    void setBaseUrl() {
-        baseUrl = 'https://the-internet.herokuapp.com/'
+
+/*    void setup() {
+        System.setProperty("webdriver.chrome.driver", "C:\\chromedriver2\\chromedriver.exe")
+        def browser = new Browser(driver: new ChromeDriver())
+        setBaseUrl('https://the-internet.herokuapp.com')
     }*/
 
-    class MySpec extends Specification {
-        @Rule
-        TestName name = new TestName()
-
-        /* def "some test"() {
-             expect: name.methodName == "some test"
-         }*/
-    }
-
     def 'Broken Images exist'() {
-
-        given: 'the base url'
-        getBaseUrl()
         when: 'we call the Broken Images Page'
+        setBaseUrl(getBaseUrl())
         to BrokenImages
         then: 'we are on the right page and we see 2 broken images out of 3'
         BrokenImages page = at BrokenImages
@@ -43,15 +34,23 @@ class HerokuappTest extends GebReportingSpec {
     }
 
     def 'Dummy Test'() {
-
-        given: 'two numbers to add'
+        //  given: 'two numbers to add'
+        when: 'a + b'
         int a = 3
         int b = 4
-        when: 'a + b'
         a + b
         then: 'it must be 7'
         assert a + b == 7
+        print(a + b)
 
+    }
 
+    def 'Dummy2'() {
+        //  given: 'taken the base url'
+        when: 'I see the heading'
+        go(baseUrl)
+        $('h1', text: 'Welcome to the-internet')
+        then: 'it is displayed'
+        assert { $('h1', text: 'Welcome to the-internet') }
     }
 }
